@@ -33,7 +33,7 @@ namespace oAuth2JwtProfile
 
             var payload = new JwtPayload
             {
-                { "aud", "https://adfs.dev.rb.is/adfs/oauth2/token"}, //adfs á að fá tokenið
+                { "aud", url}, //adfs á að fá tokenið
                 { "iss", clientId}, //clientId sem er skráð í adfs
                 { "sub", clientId }, //clientId sem er skráð í adfs
                 { "nbf", nbf },
