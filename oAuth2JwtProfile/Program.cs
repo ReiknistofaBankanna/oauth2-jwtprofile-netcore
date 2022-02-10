@@ -12,9 +12,9 @@ namespace oAuth2JwtProfile
         static void Main(string[] args)
         {
 
-            if (args.Length != 5)
+            if (args.Length != 6)
             {
-                Console.WriteLine("Usage: .. adfsUrl certificatePath certificatePassword clientId resource");
+                Console.WriteLine("Usage: .. adfsUrl certificatePath certificatePassword clientId resource audience");
                 return;
             }
 
@@ -23,6 +23,7 @@ namespace oAuth2JwtProfile
             var cert_password = args[2];
             var clientId = args[3];
             var resource = args[4];
+            var audience = args[5];
 
             X509Certificate2 certificate = CertificateUtil.GetCertificate(cert_path, cert_password);
             var securityKey = new Microsoft.IdentityModel.Tokens.X509SecurityKey(certificate);
@@ -33,12 +34,12 @@ namespace oAuth2JwtProfile
 
             var payload = new JwtPayload
             {
-                { "aud", url}, //adfs á að fá tokenið
-                { "iss", clientId}, //clientId sem er skráð í adfs
-                { "sub", clientId }, //clientId sem er skráð í adfs
+                { "aud", audience}, //audience for the authorization server
+                { "iss", clientId}, //clientId
+                { "sub", clientId }, //clientId
                 { "nbf", nbf },
-                { "exp", nbf + 600}, //gildir í 600 sek
-                { "jti", Guid.NewGuid().ToString() } //Identifier sem þarf að vera
+                { "exp", nbf + 600}, //600 second lifetime
+                { "jti", Guid.NewGuid().ToString() } //Unique identifier
            };
 
             var token = new JwtSecurityToken(header, payload);
